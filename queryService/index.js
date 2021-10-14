@@ -4,23 +4,13 @@ const app = express()
 const server = http.createServer(app)
 const expressJSON = express.json()
 const cors = require('cors')
+const axios = require('axios')
 
 const PORT = process.env.PORT || 4002
 
 const posts ={}
 
-app.use(cors())
-app.use(expressJSON)
-
-app.get('/posts',(req, res)=>{ 
-  res.send(posts)
-})
-
-app.post('/events', (req,res) => {
-  const {type,data} = req.body
-
-  console.log('Event received:',type)
-
+const handleEvent = (type,data) => {
   if(type == 'PostCreated') {
     const {id,title} = data
 
@@ -42,7 +32,21 @@ app.post('/events', (req,res) => {
     comment.status = status
     comment.content = content
   }
+}
 
+app.use(cors())
+app.use(expressJSON)
+
+app.get('/posts',(req, res)=>{ 
+  res.send(posts)
+})
+
+app.post('/events', (req,res) => {
+  const {type,data} = req.body
+
+  console.log('Event received:',type)
+
+  handleEvent(type,data)
   res.send({});
 })
 

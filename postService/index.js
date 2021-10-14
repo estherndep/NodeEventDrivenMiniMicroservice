@@ -25,7 +25,7 @@ app.post('/posts/create',async (req,res)=>{
 
   posts[id] = newPost
 
-  await axios.post('http://localhost:4005/events', {
+  await axios.post('http://event-bus-srv:4005/events', {
     type: "PostCreated",
     data: newPost
   })
@@ -42,5 +42,6 @@ app.post('/events', (req,res) => {
 })
 
 server.listen(PORT, () => {
+  console.log(`v1234`)
   console.log(`https server listening on ${PORT}`)
 })
